@@ -1,4 +1,4 @@
-print("Smart Traffic Management System")
+print(" Traffic Management System")
 
 from database.db_manager import DatabaseManager
 
