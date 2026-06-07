@@ -1,4 +1,5 @@
 import tkinter as tk
+from datetime import datetime
 from controllers.smart_controller import SmartController
 
 
@@ -18,13 +19,14 @@ class Dashboard:
 
         self.root.title("Smart Traffic Management System")
 
-        self.root.geometry("1200x900")
-        self.root.state("zoomed")
+        self.root.geometry("1400x1000")
+        # self.root.state("zoomed")
 
-        self.root.configure(bg="#f0f0f0")
+        self.root.configure(bg="#dfe9f3")
 
         self.create_widgets()
 
+        self.update_time()
         self.update_dashboard()
 
         self.root.mainloop()
@@ -34,18 +36,35 @@ class Dashboard:
         self.heading = tk.Label(
             self.root,
             text="SMART TRAFFIC MANAGEMENT SYSTEM",
-            font=("Arial", 24, "bold"),
-            bg="#f0f0f0"
+            font=("Arial", 26, "bold"),
+            fg="#2c3e50",
+            bg="#dfe9f3"
         )
 
         self.heading.pack(pady=10)
+        self.subheading = tk.Label(
+             self.root,
+             text="AI Powered Traffic Control Dashboard",
+             font=("Arial", 14),
+             fg="#34495e",
+             bg="#dfe9f3"
+        )
 
+        self.subheading.pack()
+        self.time_label = tk.Label(
+            self.root,
+            text="",
+            font=("Arial", 12, "bold"),
+            bg="#f0f0f0"
+        )
+
+        # self.time_label.pack(pady=5)
         self.cards_frame = tk.Frame(
             self.root,
             bg="#f0f0f0"
         )
 
-        self.cards_frame.pack(pady=20)
+        self.cards_frame.pack(pady=5)
 
         self.lane_a = self.create_lane_card(
             self.cards_frame,
@@ -82,7 +101,7 @@ class Dashboard:
             bg="#f0f0f0"
         )
 
-        self.active_lane_label.pack(pady=20)
+        self.active_lane_label.pack(pady=5)
         self.system_status = tk.Label(
              self.root,
              text="System Status : RUNNING",
@@ -102,21 +121,31 @@ class Dashboard:
         )
 
         self.detection_status.pack(pady=5)
+
+        self.stats_label = tk.Label(
+           self.root,
+           text="",
+           font=("Arial", 14, "bold"),
+           bg="#f0f0f0"
+        )
+
+        # self.stats_label.pack(pady=3)
         self.emergency_label = tk.Label(
             self.root,
             text="Emergency Status : OFF",
-            font=("Arial", 16),
+            font=("Arial", 16,"bold"),
+            fg="green",
             bg="#f0f0f0"
         )
 
-        self.emergency_label.pack(pady=10)
+        self.emergency_label.pack(pady=5)
 
         self.button_frame = tk.Frame(
             self.root,
             bg="#f0f0f0"
         )
         print("BUTTON FRAME CREATED")
-        self.button_frame.pack(pady=20)
+        self.button_frame.pack(pady=5)
 
         self.ambulance_btn = tk.Button(
             self.button_frame,
@@ -198,13 +227,23 @@ class Dashboard:
         )
 
         signal_label.pack(pady=2)
+        density_label = tk.Label(
+           frame,
+           text="Density : LOW",
+           font=("Arial", 12, "bold"),
+           bg="white"
+        )
 
+        density_label.pack(pady=2)
         return {
             "frame": frame,
             "count": count_label,
-            "signal": signal_label
+            "signal": signal_label,
+            "density": density_label
         }
-
+    
+    
+    
     def update_dashboard(self):
 
         lanes = self.controller.signal_controller.get_all_lanes()
@@ -224,13 +263,41 @@ class Dashboard:
         self.lane_d["count"].config(
             text=f"Vehicles : {lanes.get('D',0)}"
         )
+        for lane_obj, count in [
+            (self.lane_a, lanes.get("A",0)),
+            (self.lane_b, lanes.get("B",0)),
+            (self.lane_c, lanes.get("C",0)),
+            (self.lane_d, lanes.get("D",0))
+       ]:
+
+          if count <= 5:
+              lane_obj["density"].config(
+              text="Density : LOW",
+              fg="green"
+          )
+
+          elif count <= 10:
+              lane_obj["density"].config(
+              text="Density : MEDIUM",
+              fg="orange"
+           )
+
+          else:
+              lane_obj["density"].config(
+              text="Density : HIGH",
+              fg="red"
+          )
 
         active_lane = self.controller.get_active_lane()
 
         self.active_lane_label.config(
             text=f"Active Lane : {active_lane}"
         )
-
+        total = sum(lanes.values())
+        self.stats_label.config(
+            text=f"Total Vehicles : {total}    |    Active Lane : {active_lane}"
+        )
+          
         self.reset_signals()
         self.lane_a["frame"].config(bg="white")
         self.lane_b["frame"].config(bg="white")
@@ -265,7 +332,20 @@ class Dashboard:
                 fg="green"
                
             )
+    def update_time(self):
 
+         current_time = datetime.now().strftime(
+           "%d-%m-%Y   %H:%M:%S"
+         )
+
+         self.time_label.config(
+           text=current_time
+        )
+
+         self.root.after(
+           1000,
+           self.update_time
+        )
     def reset_signals(self):
           
         self.lane_a["signal"].config(
@@ -294,7 +374,8 @@ class Dashboard:
         self.controller.activate_ambulance("B")
 
         self.emergency_label.config(
-            text="Emergency Status : ON"
+            text="Emergency Status : ON",
+            fg="red"
         )
 
         self.update_dashboard()
@@ -304,9 +385,10 @@ class Dashboard:
         self.controller.emergency_controller.deactivate_emergency()
 
         self.emergency_label.config(
-            text="Emergency Status : OFF"
+            text="Emergency Status : OFF",
+            fg="green"
         )
-
+        
         self.update_dashboard()
 
 

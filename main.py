@@ -1,13 +1,18 @@
-print(" Traffic Management System")
+# print(" Traffic Management System")
 
-from database.db_manager import DatabaseManager
+# from database.db_manager import DatabaseManager
 
-db = DatabaseManager()
+# db = DatabaseManager()
 
-vehicles = db.get_all_vehicles()
+# vehicles = db.get_all_vehicles()
 
-for vehicle in vehicles:
-    print(vehicle)
+# for vehicle in vehicles:
+#     print(vehicle)
 
-db.close()
+# db.close()
 
+from gui.dashboard_old import Dashboard
+
+print("SMART TRAFFIC MANAGEMENT SYSTEM STARTING...")
+
+Dashboard()
