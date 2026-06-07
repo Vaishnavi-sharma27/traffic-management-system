@@ -32,17 +32,28 @@ class SmartController:
 
     def get_active_lane(self):
 
-        emergency_lane = (
-            self.emergency_controller
-            .get_priority_lane()
-        )
+         emergency_lane = self.emergency_controller.get_priority_lane()
 
-        if emergency_lane:
-
+         if emergency_lane:
             return emergency_lane
 
-        return (
-            self.signal_controller
-            .get_priority_lane()
-        )
+         lane = self.signal_controller.get_priority_lane()
 
+         print("DEBUG LANE:", lane)
+
+         return lane
+    
+
+    # def get_active_lane(self):
+
+    #     emergency_lane = self.emergency_controller.get_priority_lane()
+
+    #     if emergency_lane:
+    #         return emergency_lane
+
+    #     normal_lane = self.signal_controller.get_priority_lane()
+
+    #     if normal_lane is None:
+    #        return "None"
+
+    #     return normal_lane

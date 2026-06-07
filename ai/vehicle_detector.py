@@ -50,7 +50,7 @@ while True:
         vehicle_count += 1
         
     lane_data["A"] = vehicle_count
-
+     # print("Lane A:", vehicle_count)           # hr frame ke liye output print hogaaa
     cv2.putText(
         annotated_frame,
         f"Lane A Vehicles: {lane_data['A']}",
@@ -70,7 +70,7 @@ while True:
     # print(
     #     "Vehicle Count:",
     #     vehicle_count         becoz infinite no. of output is printed for every frame
-    #)
+    # )
 
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break

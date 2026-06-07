@@ -14,12 +14,15 @@ class SignalController:
 
     def get_priority_lane(self):
 
-        highest_lane = max(
-            self.lanes,
-            key=self.lanes.get
-        )
+     if not self.lanes:
+        return None
 
-        return highest_lane
+     highest_lane = max(
+        self.lanes,
+        key=self.lanes.get
+     )
+
+     return highest_lane
     
     def get_all_lanes(self):
         return self.lanes
