@@ -1,14 +1,20 @@
 from controllers.signal_controller import SignalController
 from controllers.emergency_controller import EmergencyController
 
-
+controller = None #aj kii
 class SmartController:
 
     def __init__(self):
+         global controller #
 
-        self.signal_controller = SignalController()
+         if controller is not None: # ajki
+            return #
 
-        self.emergency_controller = EmergencyController()
+         self.signal_controller = SignalController()
+         self.emergency_controller = EmergencyController()
+
+         controller = self # aj ki
+         
 
     def update_lane(
         self,
@@ -57,3 +63,11 @@ class SmartController:
     #        return "None"
 
     #     return normal_lane
+
+def get_controller():     # sara function aj add kia
+      global controller
+ 
+      if controller is None:
+        controller = SmartController()
+
+      return controller

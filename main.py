@@ -11,8 +11,30 @@
 
 # db.close()
 
+#from gui.dashboard_old import Dashboard
+
+#print("SMART TRAFFIC MANAGEMENT SYSTEM STARTING...")
+
+#Dashboard()
+#from gui.dashboard_old import Dashboard
+
+
+#if __name__ == "__main__":
+ #   Dashboard()
+
+import threading
+
 from gui.dashboard_old import Dashboard
+from ai.vehicle_detector import start_detection
 
-print("SMART TRAFFIC MANAGEMENT SYSTEM STARTING...")
 
-Dashboard()
+if __name__ == "__main__":
+
+    detector_thread = threading.Thread(
+        target=start_detection,
+        daemon=True
+    )
+
+    detector_thread.start()
+
+    Dashboard()

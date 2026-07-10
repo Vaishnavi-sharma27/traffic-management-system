@@ -1,19 +1,19 @@
 import tkinter as tk
 from datetime import datetime
-from controllers.smart_controller import SmartController
+from controllers.smart_controller import get_controller #
 
 
 class Dashboard:
 
     def __init__(self):
 
-        self.controller = SmartController()
+        self.controller = get_controller()   # smartController ki jgh kia h get_controller
 
         # Dummy Data (Testing)
-        self.controller.update_lane("A", 5)
-        self.controller.update_lane("B", 10)
-        self.controller.update_lane("C", 15)
-        self.controller.update_lane("D", 20)
+        #self.controller.update_lane("A", 5)
+        #self.controller.update_lane("B", 10)
+        #self.controller.update_lane("C", 15)
+        #self.controller.update_lane("D", 20)
 
         self.root = tk.Tk()
 
@@ -392,4 +392,4 @@ class Dashboard:
         self.update_dashboard()
 
 
-Dashboard()
+#Dashboard()
